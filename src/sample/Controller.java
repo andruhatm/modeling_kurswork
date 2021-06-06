@@ -12,9 +12,9 @@ public class Controller {
 	private int timeWork = 21600;
 	private int var1 = 10;
 	private int var2 = 5;
-	private int sendTime = 0;
+	//	private int sendTime = 0;
 	private int time = 21600;
-	private int counter = 10;
+	//	private int counter = 10;
 	private boolean evmFree = true;
 	private boolean service = false;
 
@@ -98,6 +98,16 @@ public class Controller {
 		System.out.println(terminal1.getName() + " " + terminal1.getSecoundsOfWork());
 		System.out.println(terminal2.getName() + " " + terminal2.getSecoundsOfWork());
 		System.out.println(terminal3.getName() + " " + terminal3.getSecoundsOfWork());
+
+		serviceInput = 0;
+		zadanieEvmDelay = 0;
+		serviceEvmInput = 0;
+		terminals.clear();
+		timeWork = 21600;
+		time = 21600;
+
+		evmFree = true;
+		service = false;
 	}
 
 	private void generationAndWork(int past) {
@@ -122,7 +132,7 @@ public class Controller {
 
 	private void checkOnEvmWork() {
 		if (!terminals.isEmpty()) {
-			Terminal terminalToWorkWith = terminals.get(0);
+			Terminal terminalToWorkWith = terminals.stream().findFirst().get();
 			System.out.println("time: " + (time - timeWork) + " place: evm obrabativaet " + terminalToWorkWith.getName());
 
 			evmFree = false;
@@ -134,7 +144,7 @@ public class Controller {
 				evmFree = true;
 				serviceInput = 0;
 
-				terminals.remove(terminalToWorkWith);
+				terminals.remove(0);
 				System.out.println("time: " + (time - timeWork) + " place: evm ended work on " + terminalToWorkWith.getName());
 			}
 		}
@@ -188,6 +198,7 @@ public class Controller {
 	}
 
 	private void terminal3(int past) {
+		System.out.println("past " + past + " sendTime " + terminal3.getSendTime());
 		if (past == terminal3.getSendTime()) {
 			terminal3.addStorkaToCounter();
 			terminal3.addSecoundsOfWork(past);

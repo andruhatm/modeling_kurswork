@@ -33,7 +33,7 @@ public class Terminal {
 
 	public void addToWorkCounter() {
 		this.workCounter += 1;
-		if (this.getWorkCounter() == 5) {
+		if (this.getWorkCounter() == 4) {
 			this.terminalFree = true;
 			this.addSecoundsOfWork(5);
 			this.workCounter = 0;
