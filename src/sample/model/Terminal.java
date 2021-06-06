@@ -2,7 +2,7 @@ package sample.model;
 
 public class Terminal {
 
-	private String name;
+	private final String name;
 	private int strokaTerminalDelay = 0;
 	private boolean terminalFree = true;
 	private boolean zadanie = false;
@@ -15,19 +15,29 @@ public class Terminal {
 	private int sendTime;
 	private int time;
 	private int allStrokiCounter = 0;
+	private int defaultCountTerm;
+	private int mean;
+	private int mean1;
+	private int std;
+	private int std1;
+	private int analyze1;
+	private int analyze2;
+	private int termOtvet;
+	private int zadanieCount;
 
-	public Terminal(String name) {
-		this.sendTime = 10 - 5 + (int) (Math.random() * (2 * 5));
+	public Terminal(String name, int countTerm, int mean, int std, int mean1, int std1, int analyze1, int analyze2, int termOtvet, int zadanieCount) {
+		this.countTerm = countTerm;
+		this.defaultCountTerm = countTerm;
+		this.mean1 = mean1;
+		this.mean = mean;
+		this.termOtvet = termOtvet;
+		this.zadanieCount = zadanieCount;
+		this.std = std;
+		this.std1 = std1;
+		this.analyze1 = analyze1;
+		this.analyze2 = analyze2;
+		this.sendTime = this.mean - this.std + (int) (Math.random() * (2 * this.std));
 		this.name = name;
-	}
-
-	public Terminal(int strokaTerminalDelay, boolean terminalFree, boolean serviceTerminal, int counter, int sendTime) {
-		sendTime = 10 - 5 + (int) (Math.random() * (2 * 5));
-		this.strokaTerminalDelay = strokaTerminalDelay;
-		this.terminalFree = terminalFree;
-		this.work = serviceTerminal;
-		this.counter = counter;
-		this.sendTime = sendTime;
 	}
 
 	public int getCountTerm() {
@@ -44,13 +54,12 @@ public class Terminal {
 
 	public void addToWorkCounter() {
 		int count;
-		if (counter == 10) {
-			this.countTerm = 3;
-			count = 38;
+		if (counter == zadanieCount) {
+			this.countTerm = this.defaultCountTerm;
+			count = analyze1 + analyze2;
 		} else {
-			count = 5;
+			count = this.termOtvet;
 		}
-//		if (count == 1)
 		this.workCounter += 1;
 		System.out.println("count of waiting for " + this.getName() + " " + count);
 		if (this.getWorkCounter() == count) {
@@ -58,11 +67,9 @@ public class Terminal {
 			this.addSecoundsOfWork(count);
 			this.workCounter = 0;
 			this.setZadanieFalse();
-//			this.countTerm = 3;
-			//&&
 			this.work = false;
 			this.setSendTime(generateSendTime());
-			if (counter == 10) {
+			if (counter == zadanieCount) {
 				counter = 0;
 			}
 			System.out.println("new time for " + this.name + " " + this.sendTime);
@@ -73,17 +80,17 @@ public class Terminal {
 		return zadanie;
 	}
 
-	public void setZadanieFalse(){
+	public void setZadanieFalse() {
 		this.zadanie = false;
 	}
 
 	public void setZadanie(boolean zadanie) {
 		this.zadanie = zadanie;
-		this.countTerm = 10 - 3 + (int) (Math.random() * (2 * 3));
+		this.countTerm = mean1 - std1 + (int) (Math.random() * (2 * std1));
 	}
 
 	public int generateSendTime() {
-		return 10 - 5 + (int) (Math.random() * (2 * 5));
+		return this.mean - this.std + (int) (Math.random() * (2 * this.std));
 	}
 
 	public int getWorkCounter() {
