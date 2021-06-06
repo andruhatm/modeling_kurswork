@@ -21,6 +21,7 @@ public class Controller {
 //	private boolean serviceTerminal1 = false;
 //	private boolean serviceTerminal2 = false;
 //	private boolean serviceTerminal3 = false;
+	private int evmSecondsWork = 0;
 
 	private int serviceInput = 0;
 	private int zadanieEvmDelay = 0;
@@ -91,13 +92,17 @@ public class Controller {
 
 			timeWork--;
 		}
-		System.out.println(terminal1.getName() + " " + terminal1.getAllStrokiCounter());
-		System.out.println(terminal2.getName() + " " + terminal2.getAllStrokiCounter());
-		System.out.println(terminal3.getName() + " " + terminal3.getAllStrokiCounter());
+		System.out.println(terminal1.getName() + " all stroki " + terminal1.getAllStrokiCounter());
+		System.out.println(terminal2.getName() + " all stroki " + terminal2.getAllStrokiCounter());
+		System.out.println(terminal3.getName() + " all stroki " + terminal3.getAllStrokiCounter());
 
 		System.out.println(terminal1.getName() + " " + terminal1.getSecoundsOfWork());
 		System.out.println(terminal2.getName() + " " + terminal2.getSecoundsOfWork());
 		System.out.println(terminal3.getName() + " " + terminal3.getSecoundsOfWork());
+
+		System.out.println(terminal1.getName() + " " + terminal1.getZadanieAllCount());
+		System.out.println(terminal2.getName() + " " + terminal2.getZadanieAllCount());
+		System.out.println(terminal3.getName() + " " + terminal3.getZadanieAllCount());
 
 		serviceInput = 0;
 		zadanieEvmDelay = 0;
@@ -131,24 +136,32 @@ public class Controller {
 	}
 
 	private void checkOnEvmWork() {
+		//fix
 		if (!terminals.isEmpty()) {
 			Terminal terminalToWorkWith = terminals.stream().findFirst().get();
-			System.out.println("time: " + (time - timeWork) + " place: evm obrabativaet " + terminalToWorkWith.getName());
 
+			System.out.println("time: " + (time - timeWork) + " place: evm obrabativaet " + terminalToWorkWith.getName()+ " with "+ terminalToWorkWith.getCountTerm());
+
+			int workTime = terminalToWorkWith.getCountTerm();
 			evmFree = false;
 			serviceInput++;
 
-			if (serviceInput == 3) {
-				terminalToWorkWith.addSecoundsOfWork(3);
+			if (serviceInput == terminalToWorkWith.getCountTerm()) {
+				// may be an error
+				terminalToWorkWith.addSecoundsOfWork(terminalToWorkWith.getCountTerm());
 				terminalToWorkWith.setWork(true);
 				evmFree = true;
 				serviceInput = 0;
 
 				terminals.remove(0);
+				if (!terminals.isEmpty()){
+					for (Terminal t: terminals){
+						t.addSecoundsOfWork(workTime);
+					}
+				}
 				System.out.println("time: " + (time - timeWork) + " place: evm ended work on " + terminalToWorkWith.getName());
 			}
 		}
-
 	}
 
 	private void stopEVM() {
@@ -174,37 +187,58 @@ public class Controller {
 	}
 
 	private void terminal1(int past) {
+		System.out.println("past " + past + " terminal1 sendTime " + terminal1.getSendTime());
 		if (past == terminal1.getSendTime()) {
+			//all stroki by terminal counter
 			terminal1.addStorkaToCounter();
+			//seconds of work terminal all
 			terminal1.addSecoundsOfWork(past);
+			//terminal free
 			terminal1.setTerminalFree(false);
 			terminal1.setSendTime(21600);
+			//counter 0 to 10
 			terminal1.addCounter();
+			if (terminal1.getCounter() == 10) {
+				System.out.println("COUNTER IS 10 HERE terminal1");
+				terminal1.addZadanieCount();
+				terminal1.setZadanie(true);
+			}
 			System.out.println("time: " + (time - timeWork) + " place: terminal 1 nabral stroku #" + terminal1.getCounter());
 			terminals.add(terminal1);
 		}
 	}
 
 	private void terminal2(int past) {
+		System.out.println("past " + past + " terminal2 sendTime " + terminal2.getSendTime());
 		if (past == terminal2.getSendTime()) {
 			terminal2.addStorkaToCounter();
 			terminal2.addSecoundsOfWork(past);
 			terminal2.setTerminalFree(false);
 			terminal2.setSendTime(21600);
 			terminal2.addCounter();
+			if (terminal2.getCounter() == 10) {
+				System.out.println("COUNTER IS 10 HERE terminal2");
+				terminal2.addZadanieCount();
+				terminal2.setZadanie(true);
+			}
 			System.out.println("time: " + (time - timeWork) + " place: terminal 2 nabral stroku #" + terminal2.getCounter());
 			terminals.add(terminal2);
 		}
 	}
 
 	private void terminal3(int past) {
-		System.out.println("past " + past + " sendTime " + terminal3.getSendTime());
+		System.out.println("past " + past + " terminal3 sendTime " + terminal3.getSendTime());
 		if (past == terminal3.getSendTime()) {
 			terminal3.addStorkaToCounter();
 			terminal3.addSecoundsOfWork(past);
 			terminal3.setTerminalFree(false);
 			terminal3.setSendTime(21600);
 			terminal3.addCounter();
+			if (terminal3.getCounter() == 10) {
+				System.out.println("COUNTER IS 10 HERE terminal3");
+				terminal3.addZadanieCount();
+				terminal3.setZadanie(true);
+			}
 			System.out.println("time: " + (time - timeWork) + " place: terminal 3 nabral stroku #" + terminal3.getCounter());
 			terminals.add(terminal3);
 		}
