@@ -43,6 +43,16 @@ public class Controller extends Export {
 	public MenuItem word;
 	@FXML
 	public MenuItem excel;
+	@FXML
+	public Label stroki1;
+	@FXML
+	public Label stroki2;
+	@FXML
+	public Label stroki3;
+	@FXML
+	public Label queue;
+	@FXML
+	public Label procent;
 
 	private ObservableList<Report> reports = FXCollections.observableArrayList();
 
@@ -174,6 +184,11 @@ public class Controller extends Export {
 		this.prostoy = df.format(((double) this.noNullEntries / this.allEntries));
 		System.out.println("evm work load " + evmLoad);
 		System.out.println("prostoy proektirovshika " + prostoy);
+		stroki1.setText(String.valueOf(terminal1.getAllStrokiCounter()));
+		stroki2.setText(String.valueOf(terminal2.getAllStrokiCounter()));
+		stroki3.setText(String.valueOf(terminal3.getAllStrokiCounter()));
+		queue.setText(String.valueOf(noNullEntries));
+		procent.setText(String.valueOf(evmLoad)+"%");
 
 		countReport++;
 		report();

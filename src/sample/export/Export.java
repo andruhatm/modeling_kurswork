@@ -26,7 +26,7 @@ public class Export {
     protected void report(ObservableList<Report> list) {
         if (!path.exists()) {
             System.out.println(path);
-            System.out.println(" created");
+            System.out.println("created");
             path.mkdir();
         }else {
             System.out.println("not created");
