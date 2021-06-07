@@ -1,15 +1,21 @@
 package sample;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import sample.export.Export;
+import sample.model.Report;
 import sample.model.Terminal;
 
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Controller {
+public class Controller extends Export {
 
 	@FXML
 	public TextField termOtvet1;
@@ -31,9 +37,37 @@ public class Controller {
 	public TextField zadanieCount;
 	@FXML
 	public TextField analize;
+	@FXML
+	public TableView table;
+	@FXML
+	public MenuItem word;
+	@FXML
+	public MenuItem excel;
 
+	private ObservableList<Report> reports = FXCollections.observableArrayList();
+
+	@FXML
+	public TableColumn<Report, Integer> number;
+	@FXML
+	public TableColumn<Report, String> evmUsage;
+	@FXML
+	public TableColumn<Report, String> operatorLag;
+	@FXML
+	public TableColumn<Report, Integer> countT1;
+	@FXML
+	public TableColumn<Report, Integer> countT2;
+	@FXML
+	public TableColumn<Report, Integer> countT3;
+	@FXML
+	public TableColumn<Report, Integer> zadanie;
+
+	private int countReport = 0;
 	private int timeWork;
 	private int time;
+
+	String prostoy;
+	String evmLoad;
+	private int zadanieCount1;
 
 	private int noNullEntries = 0;
 	private int allEntries = 0;
@@ -132,13 +166,17 @@ public class Controller {
 		System.out.println(terminal2.getName() + " " + terminal2.getZadanieAllCount());
 		System.out.println(terminal3.getName() + " " + terminal3.getZadanieAllCount());
 
+		this.zadanieCount1 = terminal1.getZadanieAllCount() + terminal2.getZadanieAllCount() + terminal3.getZadanieAllCount();
+
 		System.out.println(evmSecondsWork);
-		double evmLoad = ((double) (this.evmSecondsWork) / this.time);
-		double prostoy = ((double) this.noNullEntries / this.allEntries);
+		DecimalFormat df = new DecimalFormat("#.###");
+		this.evmLoad = df.format(((double) (this.evmSecondsWork) / this.time));
+		this.prostoy = df.format(((double) this.noNullEntries / this.allEntries));
 		System.out.println("evm work load " + evmLoad);
 		System.out.println("prostoy proektirovshika " + prostoy);
 
-		clear();
+		countReport++;
+		report();
 	}
 
 	private void checkOnEvmWork() {
@@ -241,5 +279,28 @@ public class Controller {
 		evmSecondsWork = 0;
 		noNullEntries = 0;
 		allEntries = 0;
+	}
+
+	private void report() {
+		reports.add(new Report(countReport, this.evmLoad, this.prostoy, terminal1.getAllStrokiCounter(), terminal2.getAllStrokiCounter(), terminal3.getAllStrokiCounter(), this.zadanieCount1));
+
+		number.setCellValueFactory(new PropertyValueFactory<Report, Integer>("number"));
+		evmUsage.setCellValueFactory(new PropertyValueFactory<Report, String>("evmUsage"));
+		operatorLag.setCellValueFactory(new PropertyValueFactory<Report, String>("operatorLag"));
+		countT1.setCellValueFactory(new PropertyValueFactory<Report, Integer>("countT1"));
+		countT2.setCellValueFactory(new PropertyValueFactory<Report, Integer>("countT2"));
+		countT3.setCellValueFactory(new PropertyValueFactory<Report, Integer>("countT3"));
+		zadanie.setCellValueFactory(new PropertyValueFactory<Report, Integer>("zadanie"));
+
+		table.setItems(reports);
+		clear();
+	}
+
+	public void exportWord(ActionEvent actionEvent) throws IOException {
+		reportWord(reports);
+	}
+
+	public void exportExcel(ActionEvent actionEvent) {
+		report(reports);
 	}
 }
