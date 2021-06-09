@@ -1,5 +1,4 @@
-package sample.export;
-
+package export;
 
 import javafx.collections.ObservableList;
 import org.apache.poi.ss.usermodel.Cell;
@@ -9,7 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.*;
-import sample.model.Report;
+import sample.Report;
 
 import java.awt.*;
 import java.io.File;
@@ -19,17 +18,12 @@ import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static sample.export.SetingsExcel.*;
-
 public class Export {
     File path = new File(File.listRoots()[0],"ReportsFolder");
     protected void report(ObservableList<Report> list) {
         if (!path.exists()) {
             System.out.println(path);
-            System.out.println("created");
             path.mkdir();
-        }else {
-            System.out.println("not created");
         }
 
         String name = "Отчет";
@@ -46,14 +40,14 @@ public class Export {
                 XSSFWorkbook book = new XSSFWorkbook();
                 XSSFSheet sheet = book.createSheet(name);
 
-                XSSFCellStyle style = createCellStyl(book);
-                style.setFont(createFontMain(book));
+                XSSFCellStyle style = SetingsExcel.createCellStyl(book);
+                style.setFont(SetingsExcel.createFontMain(book));
 
-                XSSFCellStyle style1 = createCellStyl(book);
-                style1.setFont(createFont1(book));
+                XSSFCellStyle style1 = SetingsExcel.createCellStyl(book);
+                style1.setFont(SetingsExcel.createFont1(book));
 
-                XSSFCellStyle style2 = createCellStyl(book);
-                style2.setFont(createFont2(book));
+                XSSFCellStyle style2 = SetingsExcel.createCellStyl(book);
+                style2.setFont(SetingsExcel.createFont2(book));
 
                 sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 1));
 

@@ -1,14 +1,12 @@
 package sample;
 
+import export.Export;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import sample.export.Export;
-import sample.model.Report;
-import sample.model.Terminal;
 
 import java.io.IOException;
 import java.text.DecimalFormat;

@@ -107,7 +107,7 @@
             </MenuBar>
             <ImageView fitHeight="315.0" fitWidth="472.0" layoutX="188.0" layoutY="351.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@./img/q.png" />
+                  <Image url="@/img/q.png" />
                </image>
             </ImageView>
             <Label fx:id="stroki1" layoutX="271.0" layoutY="387.0" prefHeight="11.0" prefWidth="69.0" />
